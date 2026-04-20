@@ -13,4 +13,7 @@ public interface BookingRepository extends JpaRepository<Booking, Serializable> 
 
 	List<Booking> findByCourtIdAndDeletedFalse(Long courtId);
 
+
 }
+
+
