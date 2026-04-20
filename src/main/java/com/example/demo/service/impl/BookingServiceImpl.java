@@ -111,8 +111,8 @@ public class BookingServiceImpl implements BookingService {
 		bookingRepository.save(booking);
 		
 		BigDecimal amount = BigDecimal.valueOf(court.getCourtPrice());
-		walletService.debitUserWallet(user.getId(), amount);
-		walletService.creditFacilityWallet(court.getFacility().getId(), amount);
+		walletService.debitUserWalletForBooking(user.getId(), amount, booking.getId());
+		walletService.creditFacilityWalletForBooking(court.getFacility().getId(), amount, booking.getId());
 
 	}
 
@@ -126,8 +126,8 @@ public class BookingServiceImpl implements BookingService {
 		}
 		
 		BigDecimal amount = BigDecimal.valueOf(booking.getCourt().getCourtPrice());
-		walletService.debitFacilityWallet(booking.getCourt().getFacility().getId(), amount);
-		walletService.creditUserWallet(booking.getUser().getId(), amount);
+		walletService.debitFacilityWalletForRefund(booking.getCourt().getFacility().getId(), amount, booking.getId());
+		walletService.creditUserWalletForRefund(booking.getUser().getId(), amount, booking.getId());
 		
 		booking.setDeleted(true);
 		bookingRepository.save(booking);
