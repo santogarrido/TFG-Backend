@@ -1,9 +1,5 @@
 package com.example.demo.model;
 
-import java.util.List;
-
-import com.example.demo.entity.Booking;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
