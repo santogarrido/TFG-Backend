@@ -11,3 +11,4 @@ import com.example.demo.entity.Facility;
 public interface FacilityRepository extends JpaRepository<Facility, Serializable> {
 
 }
+
