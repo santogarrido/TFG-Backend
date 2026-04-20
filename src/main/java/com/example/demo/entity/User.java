@@ -51,6 +51,10 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
 	@JsonIgnore
 	private List<Booking> bookings;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
+	@JsonIgnore
+	private List<Wallet> wallets;
 
 	public User(String name, String secondName, String email, String username, String password) {
 		super();

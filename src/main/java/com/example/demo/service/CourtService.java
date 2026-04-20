@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import java.util.List;
 
-import com.example.demo.entity.Court;
 import com.example.demo.model.CourtDTO;
 
 public interface CourtService {

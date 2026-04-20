@@ -47,5 +47,9 @@ public class Facility {
 	@OneToMany(mappedBy = "facility", cascade = CascadeType.ALL, orphanRemoval = false)
 	@JsonIgnore
 	private List<Court> courts;
+	
+	@OneToMany(mappedBy = "facility", cascade = CascadeType.ALL, orphanRemoval = false)
+	@JsonIgnore
+	private List<Wallet> wallets;
 
 }
