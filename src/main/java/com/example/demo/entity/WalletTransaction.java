@@ -1,18 +1,19 @@
 package com.example.demo.entity;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,27 +23,35 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table(name = "wallets")
-public class Wallet {
+@Table(name = "wallet_transactions")
+public class WalletTransaction {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "wallet_id", nullable = false)
 	@JsonIgnore
-	private User user;
+	private Wallet wallet;
 
-	@ManyToOne
-	@JoinColumn(name = "facility_id")
-	@JsonIgnore
-	private Facility facility;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private WalletReferenceType referenceType;
+
+	private Long referenceId;
 
 	@Column(nullable = false, precision = 15, scale = 2)
-	private BigDecimal money;
-	
-	@OneToMany(mappedBy = "wallet")
-	@JsonIgnore
-	private List<WalletTransaction> transactions;
+	private BigDecimal amount;
+
+	@Column(nullable = false, precision = 15, scale = 2)
+	private BigDecimal balanceBefore;
+
+	@Column(nullable = false, precision = 15, scale = 2)
+	private BigDecimal balanceAfter;
+
+	@Column(nullable = false)
+	private LocalDateTime createdAt;
+
+	private String description;
 }
