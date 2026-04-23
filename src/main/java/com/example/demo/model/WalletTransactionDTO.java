@@ -13,13 +13,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class WalletTransactionDTO {
 
-	private long id;
+	private int id;
 
 	private long walletId;
 
-	private int userId;
+	private long userId;
 
-	private int facilityId;
+	private long facilityId;
 
 	private WalletReferenceType referenceType;
 
@@ -33,7 +33,7 @@ public class WalletTransactionDTO {
 
 	private String description;
 
-	public WalletTransactionDTO(long walletId, int userId, int facilityId, WalletReferenceType referenceType,
+	public WalletTransactionDTO(long walletId, long userId, long facilityId, WalletReferenceType referenceType,
 			Long referenceId, BigDecimal amount, BigDecimal balanceBefore, BigDecimal balanceAfter,
 			String description) {
 		super();
