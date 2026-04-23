@@ -171,11 +171,8 @@ public class WalletServiceImpl implements WalletService {
 		ModelMapper modelMapper = new ModelMapper();
 		WalletTransactionDTO transactionDTO = modelMapper.map(transaction, WalletTransactionDTO.class);
 		transactionDTO.setWalletId(transaction.getWallet().getId());
-		transactionDTO.setUserId(
-				transaction.getWallet().getUser() != null ? transaction.getWallet().getUser().getId().intValue() : 0);
-		transactionDTO.setFacilityId(
-				transaction.getWallet().getFacility() != null ? transaction.getWallet().getFacility().getId().intValue()
-						: 0);
+		transactionDTO.setUserId(transaction.getWallet().getUser().getId());
+		transactionDTO.setFacilityId(transaction.getWallet().getFacility().getId());
 		return transactionDTO;
 	}
 }
