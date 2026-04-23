@@ -11,7 +11,7 @@ import com.example.demo.entity.WalletTransaction;
 @Repository("walletTransactionRepository")
 public interface WalletTransactionRepository extends JpaRepository<WalletTransaction, Serializable> {
 
-	List<WalletTransaction> findByWalletUserIdOrderByCreatedAtDesc(Long userId);
+	List<WalletTransaction> findByWalletUserId(Long userId);
 
-	List<WalletTransaction> findByWalletFacilityIdOrderByCreatedAtDesc(Long facilityId);
+	List<WalletTransaction> findByWalletFacilityId(Long facilityId);
 }

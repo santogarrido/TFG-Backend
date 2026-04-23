@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -50,8 +49,7 @@ public class WalletTransaction {
 	@Column(nullable = false, precision = 15, scale = 2)
 	private BigDecimal balanceAfter;
 
-	@Column(nullable = false)
-	private LocalDateTime createdAt;
-
 	private String description;
+	
+	
 }
