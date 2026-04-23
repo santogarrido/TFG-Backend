@@ -1,7 +1,6 @@
 package com.example.demo.service.impl;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class WalletServiceImpl implements WalletService {
 	@Autowired
 	@Qualifier("walletRepository")
 	private WalletRepository walletRepository;
-	
+
 	@Autowired
 	@Qualifier("walletTransactionRepository")
 	private WalletTransactionRepository walletTransactionRepository;
@@ -44,21 +43,22 @@ public class WalletServiceImpl implements WalletService {
 				.orElseThrow(() -> new RuntimeException("Wallet not found for facility"));
 		return transform(wallet);
 	}
-	
+
 	@Override
 	public List<WalletTransactionDTO> getUserTransactions(long userId) {
 		List<WalletTransactionDTO> transactionDTOs = new ArrayList<>();
-		for (WalletTransaction transaction : walletTransactionRepository.findByWalletUserIdOrderByCreatedAtDesc(userId)) {
+		for (WalletTransaction transaction : walletTransactionRepository
+				.findByWalletUserId(userId)) {
 			transactionDTOs.add(transformTransaction(transaction));
 		}
 		return transactionDTOs;
 	}
-	
+
 	@Override
 	public List<WalletTransactionDTO> getFacilityTransactions(long facilityId) {
 		List<WalletTransactionDTO> transactionDTOs = new ArrayList<>();
 		for (WalletTransaction transaction : walletTransactionRepository
-				.findByWalletFacilityIdOrderByCreatedAtDesc(facilityId)) {
+				.findByWalletFacilityId(facilityId)) {
 			transactionDTOs.add(transformTransaction(transaction));
 		}
 		return transactionDTOs;
@@ -69,17 +69,15 @@ public class WalletServiceImpl implements WalletService {
 	public void debitUserWallet(long userId, BigDecimal amount) {
 		Wallet wallet = walletRepository.findByUserId(userId)
 				.orElseThrow(() -> new RuntimeException("Wallet not found for user"));
-		applyTransaction(wallet, true, WalletReferenceType.MANUAL, null, amount,
-				"Manual debit from user wallet");
+		applyTransaction(wallet, true, WalletReferenceType.MANUAL, null, amount, "Manual debit from user wallet");
 	}
-	
+
 	@Override
 	@Transactional
 	public void creditUserWallet(long userId, BigDecimal amount) {
 		Wallet wallet = walletRepository.findByUserId(userId)
 				.orElseThrow(() -> new RuntimeException("Wallet not found for user"));
-		applyTransaction(wallet, false, WalletReferenceType.MANUAL, null, amount,
-				"Manual credit to user wallet");
+		applyTransaction(wallet, false, WalletReferenceType.MANUAL, null, amount, "Manual credit to user wallet");
 	}
 
 	@Override
@@ -87,62 +85,56 @@ public class WalletServiceImpl implements WalletService {
 	public void creditFacilityWallet(long facilityId, BigDecimal amount) {
 		Wallet wallet = walletRepository.findByFacilityId(facilityId)
 				.orElseThrow(() -> new RuntimeException("Wallet not found for facility"));
-		applyTransaction(wallet, false, WalletReferenceType.MANUAL, null, amount,
-				"Manual credit to facility wallet");
+		applyTransaction(wallet, false, WalletReferenceType.MANUAL, null, amount, "Manual credit to facility wallet");
 	}
-	
+
 	@Override
 	@Transactional
 	public void debitFacilityWallet(long facilityId, BigDecimal amount) {
 		Wallet wallet = walletRepository.findByFacilityId(facilityId)
 				.orElseThrow(() -> new RuntimeException("Wallet not found for facility"));
-		applyTransaction(wallet, true, WalletReferenceType.MANUAL, null, amount,
-				"Manual debit from facility wallet");
+		applyTransaction(wallet, true, WalletReferenceType.MANUAL, null, amount, "Manual debit from facility wallet");
 	}
-	
+
 	@Override
 	@Transactional
 	public void debitUserWalletForBooking(long userId, BigDecimal amount, long bookingId) {
 		Wallet wallet = walletRepository.findByUserId(userId)
 				.orElseThrow(() -> new RuntimeException("Wallet not found for user"));
-		applyTransaction(wallet, true, WalletReferenceType.BOOKING, bookingId, amount,
-				"Booking payment");
+		applyTransaction(wallet, true, WalletReferenceType.BOOKING, bookingId, amount, "Booking payment");
 	}
-	
+
 	@Override
 	@Transactional
 	public void creditFacilityWalletForBooking(long facilityId, BigDecimal amount, long bookingId) {
 		Wallet wallet = walletRepository.findByFacilityId(facilityId)
 				.orElseThrow(() -> new RuntimeException("Wallet not found for facility"));
-		applyTransaction(wallet, false, WalletReferenceType.BOOKING, bookingId, amount,
-				"Booking income");
+		applyTransaction(wallet, false, WalletReferenceType.BOOKING, bookingId, amount, "Booking income");
 	}
-	
+
 	@Override
 	@Transactional
 	public void debitFacilityWalletForRefund(long facilityId, BigDecimal amount, long bookingId) {
 		Wallet wallet = walletRepository.findByFacilityId(facilityId)
 				.orElseThrow(() -> new RuntimeException("Wallet not found for facility"));
-		applyTransaction(wallet, true, WalletReferenceType.BOOKING_REFUND, bookingId, amount,
-				"Booking refund");
+		applyTransaction(wallet, true, WalletReferenceType.BOOKING_REFUND, bookingId, amount, "Booking refund");
 	}
-	
+
 	@Override
 	@Transactional
 	public void creditUserWalletForRefund(long userId, BigDecimal amount, long bookingId) {
 		Wallet wallet = walletRepository.findByUserId(userId)
 				.orElseThrow(() -> new RuntimeException("Wallet not found for user"));
-		applyTransaction(wallet, false, WalletReferenceType.BOOKING_REFUND, bookingId, amount,
-				"Booking refund");
+		applyTransaction(wallet, false, WalletReferenceType.BOOKING_REFUND, bookingId, amount, "Booking refund");
 	}
 
-	private void applyTransaction(Wallet wallet, boolean isDebit, WalletReferenceType referenceType,
-			Long referenceId, BigDecimal amount, String description) {
+	private void applyTransaction(Wallet wallet, boolean isDebit, WalletReferenceType referenceType, Long referenceId,
+			BigDecimal amount, String description) {
 		BigDecimal balanceBefore = wallet.getMoney();
 		if (balanceBefore == null) {
 			balanceBefore = BigDecimal.ZERO;
 		}
-		
+
 		BigDecimal balanceAfter;
 		if (isDebit) {
 			if (balanceBefore.compareTo(amount) < 0) {
@@ -152,10 +144,10 @@ public class WalletServiceImpl implements WalletService {
 		} else {
 			balanceAfter = balanceBefore.add(amount);
 		}
-		
+
 		wallet.setMoney(balanceAfter);
 		walletRepository.save(wallet);
-		
+
 		WalletTransaction transaction = new WalletTransaction();
 		transaction.setWallet(wallet);
 		transaction.setReferenceType(referenceType);
@@ -163,7 +155,6 @@ public class WalletServiceImpl implements WalletService {
 		transaction.setAmount(amount);
 		transaction.setBalanceBefore(balanceBefore);
 		transaction.setBalanceAfter(balanceAfter);
-		transaction.setCreatedAt(LocalDateTime.now());
 		transaction.setDescription(description);
 		walletTransactionRepository.save(transaction);
 	}
@@ -175,16 +166,16 @@ public class WalletServiceImpl implements WalletService {
 		walletDTO.setFacilityId(wallet.getFacility() != null ? wallet.getFacility().getId().intValue() : 0);
 		return walletDTO;
 	}
-	
+
 	private WalletTransactionDTO transformTransaction(WalletTransaction transaction) {
 		ModelMapper modelMapper = new ModelMapper();
 		WalletTransactionDTO transactionDTO = modelMapper.map(transaction, WalletTransactionDTO.class);
 		transactionDTO.setWalletId(transaction.getWallet().getId());
 		transactionDTO.setUserId(
 				transaction.getWallet().getUser() != null ? transaction.getWallet().getUser().getId().intValue() : 0);
-		transactionDTO.setFacilityId(transaction.getWallet().getFacility() != null
-				? transaction.getWallet().getFacility().getId().intValue()
-				: 0);
+		transactionDTO.setFacilityId(
+				transaction.getWallet().getFacility() != null ? transaction.getWallet().getFacility().getId().intValue()
+						: 0);
 		return transactionDTO;
 	}
 }
