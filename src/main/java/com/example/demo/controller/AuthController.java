@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.entity.User;
 import com.example.demo.model.ResponseAPI;
 import com.example.demo.model.UserDTO;
-import com.example.demo.repository.UserRepository;
 import com.example.demo.service.AuthService;
 import com.example.demo.service.UserService;
 
@@ -53,7 +52,7 @@ public class AuthController {
 		try {
 			User newUser = authService.register(user);
 			Map<String, Object> data = Map.of("id", newUser.getId(), "username", newUser.getUsername(), "email",
-					newUser.getEmail(), "name", newUser.getName(), "secondName", newUser.getSecondName());
+					newUser.getEmail(), "name", newUser.getName(), "secondName", newUser.getSecondName(), "password", newUser.getPassword());
 			return ResponseEntity.ok(new ResponseAPI<>(true, data, "User registered successfully"));
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseAPI<>(false, null, e.getMessage()));

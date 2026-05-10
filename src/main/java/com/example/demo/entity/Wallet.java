@@ -40,7 +40,7 @@ public class Wallet {
 	private Facility facility;
 
 	@Column(nullable = false, precision = 15, scale = 2)
-	private BigDecimal money;
+	private BigDecimal amount;
 	
 	@OneToMany(mappedBy = "wallet")
 	@JsonIgnore

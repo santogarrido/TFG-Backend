@@ -10,7 +10,7 @@ public interface FacilityService {
 
 	FacilityDTO getFacilityById(long id);
 
-	void addFacility(FacilityDTO facilityDTO);
+	FacilityDTO addFacility(FacilityDTO facilityDTO);
 
 	void deleteFacility(long id);
 

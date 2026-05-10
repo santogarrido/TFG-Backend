@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -39,7 +40,7 @@ public class Court {
 	private int bookingDuration;
 
 	@Column(nullable = false)
-	private double courtPrice;
+	private BigDecimal courtPrice;
 	
 	private boolean activated;
 

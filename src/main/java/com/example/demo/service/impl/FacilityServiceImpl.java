@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.entity.Facility;
 import com.example.demo.entity.Wallet;
 import com.example.demo.model.FacilityDTO;
+import com.example.demo.model.FacilityWalletDTO;
 import com.example.demo.repository.FacilityRepository;
 import com.example.demo.repository.WalletRepository;
 import com.example.demo.service.FacilityService;
@@ -55,7 +56,7 @@ public class FacilityServiceImpl implements FacilityService {
 	 */
 	@Override
 	@Transactional
-	public void addFacility(FacilityDTO facilityDTO) {
+	public FacilityDTO addFacility(FacilityDTO facilityDTO) {
 
 		Facility facility = new Facility();
 		
@@ -71,8 +72,10 @@ public class FacilityServiceImpl implements FacilityService {
 		
 		Wallet wallet = new Wallet();
 		wallet.setFacility(savedFacility);
-		wallet.setMoney(BigDecimal.ZERO);
+		wallet.setAmount(BigDecimal.ZERO);
 		walletRepository.save(wallet);
+
+		return transform(savedFacility);
 
 	}
 
@@ -132,16 +135,6 @@ public class FacilityServiceImpl implements FacilityService {
 	private FacilityDTO transform(Facility facility) {
 		ModelMapper modelMapper = new ModelMapper();
 		return modelMapper.map(facility, FacilityDTO.class);
-	}
-
-	// Transform model into entity
-	private Facility transform(FacilityDTO facilityDTO) {
-
-		ModelMapper modelMapper = new ModelMapper();
-		Facility facility = modelMapper.map(facilityDTO, Facility.class);
-
-		return facility;
-
 	}
 
 }

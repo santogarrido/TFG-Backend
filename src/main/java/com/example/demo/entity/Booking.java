@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -39,6 +40,8 @@ public class Booking {
 	private LocalDateTime bookingDateTime;
 
 	private LocalDateTime courtDateTimeBooking;
+	
+	private BigDecimal courtPrice;
 
 	private boolean deleted;
 

@@ -9,25 +9,20 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class WalletDTO {
+public class FacilityWalletDTO {
 
-	private int id;
-	
-	private int userId;
-	
-	private int facilityId;
-	
-	private BigDecimal money;
+    private int id;
 
-	public WalletDTO(int userId, int facilityId, BigDecimal money) {
+    private int facilityId;
+
+    private BigDecimal amount;
+
+	public FacilityWalletDTO(int facilityId, BigDecimal amount) {
 		super();
-		this.userId = userId;
 		this.facilityId = facilityId;
-		this.money = money;
+		this.amount = amount;
 	}
-
-
-	
-	
-	
+    
+    
+    
 }

@@ -49,8 +49,6 @@ public class MinIoServiceImpl implements MinIoService{
 			throw new RuntimeException("Error uploading image " + e);
 		}
 		
-	}
-	
-	
+	}	
 	
 }
