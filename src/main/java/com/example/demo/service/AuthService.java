@@ -64,7 +64,7 @@ public class AuthService {
 		
 		Wallet wallet = new Wallet();
 		wallet.setUser(savedUser);
-		wallet.setMoney(BigDecimal.ZERO);
+		wallet.setAmount(BigDecimal.ZERO);
 		walletRepository.save(wallet);
 		
 		return savedUser;

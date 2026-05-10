@@ -13,7 +13,7 @@ import com.example.demo.model.CourtDTO;
 import com.example.demo.repository.CourtRepository;
 import com.example.demo.repository.FacilityRepository;
 import com.example.demo.service.CourtService;
-import com.example.demo.service.FacilityService;
+
 
 @Service("courtService")
 public class CourtServiceImpl implements CourtService {
@@ -71,6 +71,7 @@ public class CourtServiceImpl implements CourtService {
 		court.setName(courtDTO.getName());
 		court.setCategory(courtDTO.getCategory());
 		court.setBookingDuration(courtDTO.getBookingDuration());
+		court.setCourtPrice(courtDTO.getCourtPrice());
 		court.setActivated(true);
 		court.setDeleted(false);
 		court.setFacility(facilityRepository.findById(courtDTO.getFacilityId()).orElse(null));
@@ -131,20 +132,5 @@ public class CourtServiceImpl implements CourtService {
 		return modelMapper.map(court, CourtDTO.class);
 	}
 
-	/**
-	 * Transform model to entity
-	 * 
-	 * @param courtDTO
-	 * @return
-	 */
-
-	private Court transform(CourtDTO courtDTO) {
-
-		ModelMapper modelMapper = new ModelMapper();
-		Court court = modelMapper.map(courtDTO, Court.class);
-
-		return court;
-
-	}
 
 }

@@ -34,7 +34,7 @@ public class BookingServiceImpl implements BookingService {
 	@Autowired
 	@Qualifier("userRepository")
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	@Qualifier("walletService")
 	private WalletService walletService;
@@ -95,25 +95,30 @@ public class BookingServiceImpl implements BookingService {
 	@Transactional
 	public void addBooking(BookingDTO bookingDTO) {
 
+		Court court = courtRepository.findById(bookingDTO.getCourtId())
+				.orElseThrow(() -> new RuntimeException("Court not found"));
+
+		User user = userRepository.findById(bookingDTO.getUserId())
+				.orElseThrow(() -> new RuntimeException("User not found"));
+
+		BigDecimal amount = court.getCourtPrice();
+
+		if (!walletService.hasEnoughBalance(user.getId(), amount)) {
+			throw new RuntimeException("Insufficient balance");
+		}
+
 		Booking booking = new Booking();
 		booking.setCourtDateTimeBooking(bookingDTO.getCourtDateTimeBooking());
 		booking.setBookingDateTime(bookingDTO.getBookingDateTime());
 		booking.setDeleted(false);
-
-		Court court = courtRepository.findById(bookingDTO.getCourtId())
-				.orElseThrow(() -> new RuntimeException("Court not found"));
-		User user = userRepository.findById(bookingDTO.getUserId())
-				.orElseThrow(() -> new RuntimeException("User not found"));
-
+		booking.setCourtPrice(court.getCourtPrice());
 		booking.setCourt(court);
 		booking.setUser(user);
 
 		bookingRepository.save(booking);
-		
-		BigDecimal amount = BigDecimal.valueOf(court.getCourtPrice());
-		walletService.debitUserWalletForBooking(user.getId(), amount, booking.getId());
-		walletService.creditFacilityWalletForBooking(court.getFacility().getId(), amount, booking.getId());
 
+		walletService.debitUserWallet(user.getId(), amount, "Booking court: " + court.getName());
+		walletService.creditFacilityWallet(court.getFacility().getId(), amount, "Court booked by user: " + user.getUsername());
 	}
 
 	@Override
@@ -124,11 +129,11 @@ public class BookingServiceImpl implements BookingService {
 		if (booking.isDeleted()) {
 			throw new RuntimeException("Booking already cancelled");
 		}
-		
-		BigDecimal amount = BigDecimal.valueOf(booking.getCourt().getCourtPrice());
-		walletService.debitFacilityWalletForRefund(booking.getCourt().getFacility().getId(), amount, booking.getId());
-		walletService.creditUserWalletForRefund(booking.getUser().getId(), amount, booking.getId());
-		
+
+		BigDecimal amount = booking.getCourt().getCourtPrice();
+		walletService.debitFacilityWallet(booking.getCourt().getFacility().getId(), amount, "Booking refound: " + booking.getCourt().getName());
+		walletService.creditUserWallet(booking.getUser().getId(), amount, "Booking refound: " + booking.getCourt().getName());
+
 		booking.setDeleted(true);
 		bookingRepository.save(booking);
 
@@ -138,16 +143,6 @@ public class BookingServiceImpl implements BookingService {
 	private BookingDTO transform(Booking booking) {
 		ModelMapper modelMapper = new ModelMapper();
 		return modelMapper.map(booking, BookingDTO.class);
-	}
-
-	// Transform model into entity
-	private Booking transform(BookingDTO bookingDTO) {
-
-		ModelMapper modelMapper = new ModelMapper();
-		Booking booking = modelMapper.map(bookingDTO, Booking.class);
-
-		return booking;
-
 	}
 
 }

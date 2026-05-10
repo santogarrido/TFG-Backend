@@ -8,19 +8,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.model.FacilityDTO;
+import com.example.demo.model.FacilityWalletDTO;
 import com.example.demo.model.ResponseAPI;
 import com.example.demo.service.FacilityService;
+import com.example.demo.service.MinIoService;
+import com.example.demo.service.WalletService;
 
 @RestController
 @RequestMapping("/facilities")
@@ -30,13 +32,21 @@ public class FacilityController {
 	@Qualifier("facilityService")
 	private FacilityService facilityService;
 	
-	@GetMapping("/getAll")
+	@Autowired
+	@Qualifier("walletService")
+	private WalletService walletService;
+
+	@Autowired
+	@Qualifier("minIoService")
+	private MinIoService minIoService;
+	
+	@GetMapping
 	public ResponseEntity<?> getAllFacilities(){
 		List<FacilityDTO> facilities = facilityService.listAllFacilities();
 		return ResponseEntity.ok(new ResponseAPI<>(true, facilities, "Facilities retrieved succesfully"));
 	}
 	
-	@GetMapping("/getFacility/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> getFacilityById(@PathVariable int id){
 		try {
 			FacilityDTO facilityDTO = facilityService.getFacilityById(id);
@@ -46,17 +56,40 @@ public class FacilityController {
 		}
 	}
 	
-	@PostMapping("/addFacility")
-	public ResponseEntity<?> addFacility(
-			@ModelAttribute FacilityDTO facilityDTO,
-	        @RequestParam MultipartFile imagen){
+	@PostMapping(consumes = {"multipart/form-data"})
+	public ResponseEntity<?> addFacility(@RequestPart("facility") FacilityDTO facilityDTO,
+        @RequestPart("file") MultipartFile file){
 		
-		facilityService.addFacility(facilityDTO);
-		return ResponseEntity.ok(new ResponseAPI<>(true, facilityDTO, "Facility added succesfully"));
+		try {
+
+			// Validar que sea imagen
+			if (file != null && !file.isEmpty()) {
+				if (!file.getContentType().startsWith("image/")) {
+					return ResponseEntity.badRequest()
+							.body(new ResponseAPI<>(false, null, "Only image files are allowed"));
+				}
+
+				// Subir a MinIO
+				String imageUrl = minIoService.uploadImage(file);
+
+				// Guardar URL en el DTO
+				facilityDTO.setImageUrl(imageUrl);
+			}
+
+			// Guardar facility en DB
+			FacilityDTO savedFacility = facilityService.addFacility(facilityDTO);
+
+			return ResponseEntity.ok(
+					new ResponseAPI<>(true, savedFacility, "Facility added successfully")
+			);
+
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseAPI<>(false, null, e.getMessage()));
+		}
 		
 	}
 	
-	@DeleteMapping("/deleteFacility/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteFaciliy(@PathVariable long id){
 		
 		try {
@@ -67,7 +100,7 @@ public class FacilityController {
 		}
 	}
 	
-	@PutMapping("/updateFacility/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<?> updateFacility(@PathVariable long id ,@RequestBody FacilityDTO facilityDTO){
 		try {
 			FacilityDTO facility = facilityService.updateFacility(id, facilityDTO);
@@ -78,7 +111,7 @@ public class FacilityController {
 	}
 	
 	
-	@PostMapping("/activateFacility/{id}")
+	@PostMapping("/{id}/activate")
 	public ResponseEntity<?> activateFacility(@PathVariable long id){
 		try {
 			facilityService.activateFacility(id);
@@ -89,7 +122,7 @@ public class FacilityController {
 	}
 	
 	
-	@PostMapping("/deactivateFacility/{id}")
+	@PostMapping("/{id}/deactivate")
 	public ResponseEntity<?> deactivateFacility(@PathVariable long id){
 		try {
 			facilityService.deactivateFacility(id);
@@ -98,5 +131,20 @@ public class FacilityController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}
 	}
+	
+	// Wallet Implementation
+	
+	@GetMapping("/{id}/wallet")
+	public ResponseEntity<?> getFacilityWallet(@PathVariable long id) {
+	    try {
+	        FacilityWalletDTO wallet = walletService.getFacilityWallet(id);
+	        return ResponseEntity.ok(new ResponseAPI<>(true, wallet, "Facility wallet retrieved successfully"));
+	    } catch (RuntimeException e) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                .body(new ResponseAPI<>(false, null, e.getMessage()));
+	    }
+	}
+	
+	
 	
 }

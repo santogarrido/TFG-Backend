@@ -102,19 +102,4 @@ public class UserServiceImpl implements UserService {
 		return modelMapper.map(user, UserDTO.class);
 	}
 
-	/**
-	 * Transform model to entity
-	 * 
-	 * @param courtDTO
-	 * @return
-	 */
-	private User transform(UserDTO userDTO) {
-
-		ModelMapper modelMapper = new ModelMapper();
-		User user = modelMapper.map(userDTO, User.class);
-
-		return user;
-
-	}
-
 }

@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +19,7 @@ public class CourtDTO {
 
 	private int bookingDuration;
 
-	private int courtPrice;
+	private BigDecimal courtPrice;
 
 	private boolean activated;
 
@@ -25,7 +27,7 @@ public class CourtDTO {
 
 	private int facilityId;
 
-	public CourtDTO(String name, String category, int bookingDuration, int facilityId, int courtPrice) {
+	public CourtDTO(String name, String category, int bookingDuration, int facilityId, BigDecimal courtPrice) {
 		super();
 		this.name = name;
 		this.category = category;

@@ -6,8 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,18 +25,12 @@ public class WalletTransaction {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	private long id;
 
 	@ManyToOne
 	@JoinColumn(name = "wallet_id", nullable = false)
 	@JsonIgnore
 	private Wallet wallet;
-
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private WalletReferenceType referenceType;
-
-	private Long referenceId;
 
 	@Column(nullable = false, precision = 15, scale = 2)
 	private BigDecimal amount;

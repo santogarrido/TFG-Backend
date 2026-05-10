@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
@@ -21,11 +22,11 @@ public class BookingDTO {
 
 	private LocalDateTime courtDateTimeBooking;
 
-	private int courtPrice;
+	private BigDecimal courtPrice;
 
 	private boolean deleted;
 
-	public BookingDTO(int userId, int courtId, LocalDateTime bookingDateTime, LocalDateTime courtDateTimeBooking, int courtPrice) {
+	public BookingDTO(int userId, int courtId, LocalDateTime bookingDateTime, LocalDateTime courtDateTimeBooking, BigDecimal courtPrice) {
 		super();
 		this.userId = userId;
 		this.courtId = courtId;

@@ -8,14 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.entity.Booking;
 import com.example.demo.model.BookingDTO;
 import com.example.demo.model.ResponseAPI;
 import com.example.demo.service.BookingService;
@@ -36,7 +34,7 @@ public class BookingController {
 
 	}
 
-	@PostMapping("/getAllBookings/{id}")
+	@PostMapping("/{id}/getAllByFacilities")
 	public ResponseEntity<?> getAllBookings(@PathVariable long id) {
 
 		List<BookingDTO> bookings = bookingService.getAllBookingsByFacility(id);
@@ -45,14 +43,14 @@ public class BookingController {
 
 	}
 
-	@GetMapping("/getByCourt/{courtId}")
-	public ResponseEntity<?> getBookingsByCourt(@PathVariable int courtId) {
-		List<BookingDTO> bookings = bookingService.getAllBookingsByCourt(courtId);
+	@GetMapping("/{id}/getByCourt")
+	public ResponseEntity<?> getBookingsByCourt(@PathVariable long id) {
+		List<BookingDTO> bookings = bookingService.getAllBookingsByCourt(id);
 
 		return ResponseEntity.ok(new ResponseAPI<>(true, bookings, "Bookings retrieved successfully"));
 	}
 
-	@PostMapping("/getBooking/{id}")
+	@PostMapping("/{id}")
 	public ResponseEntity<?> getBookingById(@PathVariable long id) {
 		try {
 			BookingDTO booking = bookingService.getBookingById(id);
@@ -62,7 +60,7 @@ public class BookingController {
 		}
 	}
 
-	@PostMapping("/getBookingsByUser/{id}")
+	@PostMapping("/{id}/getBookingsByUser")
 	public ResponseEntity<?> getBookingsByUser(@PathVariable long id) {
 
 		List<BookingDTO> bookings = bookingService.getBookingByUser(id);
@@ -75,7 +73,7 @@ public class BookingController {
 		}
 	}
 
-	@PostMapping("/addBooking")
+	@PostMapping
 	public ResponseEntity<?> addBooking(@RequestBody BookingDTO bookingDTO) {
 
 		bookingService.addBooking(bookingDTO);
@@ -83,7 +81,7 @@ public class BookingController {
 
 	}
 
-	@DeleteMapping("/cancelBooking/{id}")
+	@DeleteMapping("{id}")
 	public ResponseEntity<?> deleteBooking(@PathVariable long id) {
 		try {
 			bookingService.cancelBooking(id);
