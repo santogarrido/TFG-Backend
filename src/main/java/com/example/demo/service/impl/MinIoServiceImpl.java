@@ -16,6 +16,11 @@ public class MinIoServiceImpl implements MinIoService{
 	private MinioClient minioClient;
 	
 	private final String facilityBucket = "facility";
+	
+    public MinIoServiceImpl(MinioClient minioClient) {
+        this.minioClient = minioClient;
+    }
+
 
 	@Override
 	public String uploadImage(MultipartFile file) {
@@ -43,7 +48,7 @@ public class MinIoServiceImpl implements MinIoService{
 					.build()
 			);
 			
-			return "http://localhost:9000/" + facilityBucket + "/" + fileName;
+			return "http://10.0.2.2:9000/" + facilityBucket + "/" + fileName;
 			
 		}catch (Exception e) {
 			throw new RuntimeException("Error uploading image " + e);
