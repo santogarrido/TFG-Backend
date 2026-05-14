@@ -66,6 +66,7 @@ public class FacilityServiceImpl implements FacilityService {
 		facility.setLocation(facilityDTO.getLocation());
 		facility.setLatitude(facilityDTO.getLatitude());
 		facility.setLongitude(facilityDTO.getLongitude());
+		facility.setImageUrl(facilityDTO.getImageUrl());
 		facility.setActivated(true);
 		facility.setDeleted(false);
 		Facility savedFacility = facilityRepository.save(facility);

@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.demo.model.FacilityDTO;
 import com.example.demo.model.FacilityWalletDTO;
 import com.example.demo.model.ResponseAPI;
+import com.example.demo.model.WalletTransactionDTO;
 import com.example.demo.service.FacilityService;
 import com.example.demo.service.MinIoService;
 import com.example.demo.service.WalletService;
@@ -40,7 +41,7 @@ public class FacilityController {
 	@Qualifier("minIoService")
 	private MinIoService minIoService;
 	
-	@GetMapping
+	@GetMapping("/getAll")
 	public ResponseEntity<?> getAllFacilities(){
 		List<FacilityDTO> facilities = facilityService.listAllFacilities();
 		return ResponseEntity.ok(new ResponseAPI<>(true, facilities, "Facilities retrieved succesfully"));
@@ -145,6 +146,17 @@ public class FacilityController {
 	    }
 	}
 	
+	// Wallet Transaction
 	
+	@GetMapping("/{id}/transactions")
+	public ResponseEntity<?> getFacilityWalletTransactions(@PathVariable int id){
+	    try {
+	        List<WalletTransactionDTO> transactions = walletService.getFacilityTransactions(id);
+	        return ResponseEntity.ok(new ResponseAPI<>(true, transactions, "Facility transactions retrieved successfully"));
+	    } catch (RuntimeException e) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                .body(new ResponseAPI<>(false, null, e.getMessage()));
+	    }
+	}
 	
 }

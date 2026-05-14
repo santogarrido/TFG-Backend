@@ -110,7 +110,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/wallet/{id}/addMoney")
-	public ResponseEntity<?> depositToWallet(@PathVariable long id, @RequestParam BigDecimal amount) {
+	public ResponseEntity<?> depositToWallet(@PathVariable int id, @RequestParam BigDecimal amount) {
 		
 		try {
 			UserWalletDTO wallet = walletService.creditUserWallet(id, amount, "Adding money to user's wallet");
