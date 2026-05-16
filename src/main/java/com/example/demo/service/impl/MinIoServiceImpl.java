@@ -51,7 +51,7 @@ public class MinIoServiceImpl implements MinIoService{
 			return "http://10.0.2.2:9000/" + facilityBucket + "/" + fileName;
 			
 		}catch (Exception e) {
-			throw new RuntimeException("Error uploading image " + e);
+			throw new RuntimeException("Error al subir la imagen " + e);
 		}
 		
 	}	

@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.entity.Facility;
 import com.example.demo.entity.Wallet;
 import com.example.demo.model.FacilityDTO;
-import com.example.demo.model.FacilityWalletDTO;
 import com.example.demo.repository.FacilityRepository;
 import com.example.demo.repository.WalletRepository;
 import com.example.demo.service.FacilityService;
@@ -47,7 +46,7 @@ public class FacilityServiceImpl implements FacilityService {
 	@Override
 	public FacilityDTO getFacilityById(long id) {
 		FacilityDTO facilityDTO = transform(
-				facilityRepository.findById(id).orElseThrow(() -> new RuntimeException("Facility not found")));
+				facilityRepository.findById(id).orElseThrow(() -> new RuntimeException("Instalación no encontrada.")));
 		return facilityDTO;
 	}
 
@@ -86,7 +85,7 @@ public class FacilityServiceImpl implements FacilityService {
 	@Override
 	public void deleteFacility(long id) {
 		Facility facility = facilityRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Facility not found"));
+				.orElseThrow(() -> new RuntimeException("Instalación no encontrada."));
 		facility.setDeleted(true);
 		facilityRepository.save(facility);
 
@@ -98,7 +97,7 @@ public class FacilityServiceImpl implements FacilityService {
 	@Override
 	public FacilityDTO updateFacility(long id, FacilityDTO facilityDTO) {
 		Facility facility = facilityRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Facility not found"));
+				.orElseThrow(() -> new RuntimeException("Instalación no encontrada."));
 
 		facility.setName(facilityDTO.getName());
 		facility.setLocation(facilityDTO.getLocation());
@@ -114,7 +113,7 @@ public class FacilityServiceImpl implements FacilityService {
 	@Override
 	public void activateFacility(long id) {
 		Facility facility = facilityRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Facility not found"));
+				.orElseThrow(() -> new RuntimeException("Instalación no encontrada."));
 		facility.setActivated(true);
 		facilityRepository.save(facility);
 
@@ -126,7 +125,7 @@ public class FacilityServiceImpl implements FacilityService {
 	@Override
 	public void deactivateFacility(long id) {
 		Facility facility = facilityRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Facility not found"));
+				.orElseThrow(() -> new RuntimeException("Instalación no encontrada."));
 		facility.setActivated(false);
 		facilityRepository.save(facility);
 

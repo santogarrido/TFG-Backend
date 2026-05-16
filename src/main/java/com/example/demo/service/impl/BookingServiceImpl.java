@@ -73,7 +73,7 @@ public class BookingServiceImpl implements BookingService {
 	@Override
 	public BookingDTO getBookingById(long id) {
 		BookingDTO bookingDTO = transform(
-				bookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Booking not found")));
+				bookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Reserva no encontrada.")));
 
 		return bookingDTO;
 	}
@@ -96,15 +96,15 @@ public class BookingServiceImpl implements BookingService {
 	public void addBooking(BookingDTO bookingDTO) {
 
 		Court court = courtRepository.findById(bookingDTO.getCourtId())
-				.orElseThrow(() -> new RuntimeException("Court not found"));
+				.orElseThrow(() -> new RuntimeException("Pista no encontrada."));
 
 		User user = userRepository.findById(bookingDTO.getUserId())
-				.orElseThrow(() -> new RuntimeException("User not found"));
+				.orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
 
 		BigDecimal amount = court.getCourtPrice();
 
 		if (!walletService.hasEnoughBalance(user.getId(), amount)) {
-			throw new RuntimeException("Insufficient balance");
+			throw new RuntimeException("Saldo insuficiente.");
 		}
 
 		Booking booking = new Booking();
@@ -117,22 +117,22 @@ public class BookingServiceImpl implements BookingService {
 
 		bookingRepository.save(booking);
 
-		walletService.debitUserWallet(user.getId(), amount, "Booking court: " + court.getName());
-		walletService.creditFacilityWallet(court.getFacility().getId(), amount, "Court booked by user: " + user.getUsername());
+		walletService.debitUserWallet(user.getId(), amount, "Resrerva de pista: " + court.getName());
+		walletService.creditFacilityWallet(court.getFacility().getId(), amount, "Pista reservada por: " + user.getUsername());
 	}
 
 	@Override
 	@Transactional
 	public void cancelBooking(long id) {
 
-		Booking booking = bookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Booking not found"));
+		Booking booking = bookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Reserva no encontrada."));
 		if (booking.isDeleted()) {
-			throw new RuntimeException("Booking already cancelled");
+			throw new RuntimeException("La reserva ya está cancelada.");
 		}
 
 		BigDecimal amount = booking.getCourt().getCourtPrice();
-		walletService.debitFacilityWallet(booking.getCourt().getFacility().getId(), amount, "Booking refound: " + booking.getCourt().getName());
-		walletService.creditUserWallet(booking.getUser().getId(), amount, "Booking refound: " + booking.getCourt().getName());
+		walletService.debitFacilityWallet(booking.getCourt().getFacility().getId(), amount, "Devolución de la reserva de pista: " + booking.getCourt().getName());
+		walletService.creditUserWallet(booking.getUser().getId(), amount, "Devolución de la reserva de pista: " + booking.getCourt().getName());
 
 		booking.setDeleted(true);
 		bookingRepository.save(booking);

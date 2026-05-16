@@ -57,7 +57,7 @@ public class CourtServiceImpl implements CourtService {
 	@Override
 	public CourtDTO getCourtById(int id) {
 		CourtDTO courtDTO = transform(
-				courtRepository.findById(id).orElseThrow(() -> new RuntimeException("Court not found")));
+				courtRepository.findById(id).orElseThrow(() -> new RuntimeException("Pista no encontrada.")));
 		return courtDTO;
 	}
 
@@ -83,7 +83,7 @@ public class CourtServiceImpl implements CourtService {
 	 */
 	@Override
 	public CourtDTO updateCourt(int id, CourtDTO courtDTO) {
-		Court court = courtRepository.findById(id).orElseThrow(() -> new RuntimeException("Court not found"));
+		Court court = courtRepository.findById(id).orElseThrow(() -> new RuntimeException("Pista no encontrada."));
 		court.setName(courtDTO.getName());
 		court.setBookingDuration(courtDTO.getBookingDuration());
 
@@ -95,7 +95,7 @@ public class CourtServiceImpl implements CourtService {
 	 */
 	@Override
 	public void deleteCourt(int id) {
-		Court court = courtRepository.findById(id).orElseThrow(() -> new RuntimeException("Court not found"));
+		Court court = courtRepository.findById(id).orElseThrow(() -> new RuntimeException("Pista no encontrada."));
 		court.setDeleted(true);
 		court.setActivated(false);
 		courtRepository.save(court);
@@ -106,7 +106,7 @@ public class CourtServiceImpl implements CourtService {
 	 */
 	@Override
 	public void activateCourt(int id) {
-		Court court = courtRepository.findById(id).orElseThrow(() -> new RuntimeException("Court not found"));
+		Court court = courtRepository.findById(id).orElseThrow(() -> new RuntimeException("Pista no encontrada."));
 		court.setActivated(true);
 		courtRepository.save(court);
 	}
@@ -116,7 +116,7 @@ public class CourtServiceImpl implements CourtService {
 	 */
 	@Override
 	public void deactivateCourt(int id) {
-		Court court = courtRepository.findById(id).orElseThrow(() -> new RuntimeException("Court not found"));
+		Court court = courtRepository.findById(id).orElseThrow(() -> new RuntimeException("Pista no encontrada."));
 		court.setActivated(false);
 		courtRepository.save(court);
 	}

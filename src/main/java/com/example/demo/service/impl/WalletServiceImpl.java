@@ -33,7 +33,7 @@ public class WalletServiceImpl implements WalletService {
 	@Override
 	public UserWalletDTO getUserWallet(long id) {
 		Wallet wallet = walletRepository.findByUserId(id)
-				.orElseThrow(() -> new RuntimeException("Wallet not found for user"));
+				.orElseThrow(() -> new RuntimeException("No se encontró cartera para el usuario."));
 		
 		UserWalletDTO dto = new UserWalletDTO();
 		dto.setId(wallet.getId().intValue());
@@ -47,7 +47,7 @@ public class WalletServiceImpl implements WalletService {
 	@Override
 	public FacilityWalletDTO getFacilityWallet(long id) {
 		Wallet wallet = walletRepository.findByFacilityId(id)
-				.orElseThrow(() -> new RuntimeException("Wallet not found for facility"));
+				.orElseThrow(() -> new RuntimeException("No se encontró cartera para la instalación."));
 
 		FacilityWalletDTO dto = new FacilityWalletDTO();
 		dto.setId(wallet.getId().intValue());
@@ -80,7 +80,7 @@ public class WalletServiceImpl implements WalletService {
 	@Transactional
 	public void debitUserWallet(long userId, BigDecimal amount, String description) {
 	    Wallet wallet = walletRepository.findByUserId(userId)
-	            .orElseThrow(() -> new RuntimeException("Wallet not found for user"));
+	            .orElseThrow(() -> new RuntimeException("No se encontró cartera para el usuario."));
 		
 	    applyTransaction(wallet, true, amount, description);
 	}
@@ -89,7 +89,7 @@ public class WalletServiceImpl implements WalletService {
 	@Transactional
 	public UserWalletDTO creditUserWallet(long userId, BigDecimal amount, String description) {
 	    Wallet wallet = walletRepository.findByUserId(userId)
-	            .orElseThrow(() -> new RuntimeException("Wallet not found for user"));
+	            .orElseThrow(() -> new RuntimeException("No se encontró cartera para el usuario."));
 		
 	    applyTransaction(wallet, false, amount, description);
 		
@@ -100,7 +100,7 @@ public class WalletServiceImpl implements WalletService {
 	@Transactional
 	public void creditFacilityWallet(long facilityId, BigDecimal amount, String description) {
 	    Wallet wallet = walletRepository.findByFacilityId(facilityId)
-	            .orElseThrow(() -> new RuntimeException("Wallet not found for facility"));
+	            .orElseThrow(() -> new RuntimeException("No se encontró cartera para la instalación."));
 
 	    applyTransaction(wallet, false, amount, description);
 	}
@@ -109,7 +109,7 @@ public class WalletServiceImpl implements WalletService {
 	@Transactional
 	public void debitFacilityWallet(long facilityId, BigDecimal amount, String description) {
 		Wallet wallet = walletRepository.findByFacilityId(facilityId)
-	            .orElseThrow(() -> new RuntimeException("Wallet not found for facility"));
+	            .orElseThrow(() -> new RuntimeException("No se encontró cartera para la instalación."));
 
 	    applyTransaction(wallet, true, amount, description);
 		
@@ -125,7 +125,7 @@ public class WalletServiceImpl implements WalletService {
 		BigDecimal balanceAfter;
 		if (isDebit) {
 			if (balanceBefore.compareTo(amount) < 0) {
-				throw new RuntimeException("Insufficient money");
+				throw new RuntimeException("Saldo insuficiente.");
 			}
 			balanceAfter = balanceBefore.subtract(amount);
 		} else {
@@ -164,7 +164,7 @@ public class WalletServiceImpl implements WalletService {
 	@Override
 	public boolean hasEnoughBalance(Long id, BigDecimal amount) {
 		Wallet wallet = walletRepository.findByUserId(id)
-				.orElseThrow(() -> new RuntimeException("Wallet not found for user"));
+				.orElseThrow(() -> new RuntimeException("No se encontró cartera para el usuario."));
 
 		BigDecimal balance = wallet.getAmount() != null ? wallet.getAmount() : BigDecimal.ZERO;
 

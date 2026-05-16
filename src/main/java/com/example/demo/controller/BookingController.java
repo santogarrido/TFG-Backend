@@ -30,7 +30,7 @@ public class BookingController {
 	public ResponseEntity<?> getAllBookings() {
 		List<BookingDTO> bookings = bookingService.getAllBookings();
 
-		return ResponseEntity.ok(new ResponseAPI<>(true, bookings, "Bookings retrieved successfully"));
+		return ResponseEntity.ok(new ResponseAPI<>(true, bookings, "Reservas obtenidas correctamente."));
 
 	}
 
@@ -39,7 +39,7 @@ public class BookingController {
 
 		List<BookingDTO> bookings = bookingService.getAllBookingsByFacility(id);
 
-		return ResponseEntity.ok(new ResponseAPI<>(true, bookings, "Bookings retrieved succesfully"));
+		return ResponseEntity.ok(new ResponseAPI<>(true, bookings, "Reservas obtenidas correctamente."));
 
 	}
 
@@ -47,14 +47,14 @@ public class BookingController {
 	public ResponseEntity<?> getBookingsByCourt(@PathVariable long id) {
 		List<BookingDTO> bookings = bookingService.getAllBookingsByCourt(id);
 
-		return ResponseEntity.ok(new ResponseAPI<>(true, bookings, "Bookings retrieved successfully"));
+		return ResponseEntity.ok(new ResponseAPI<>(true, bookings, "Reservas obtenidas correctamente."));
 	}
 
 	@PostMapping("/{id}")
 	public ResponseEntity<?> getBookingById(@PathVariable long id) {
 		try {
 			BookingDTO booking = bookingService.getBookingById(id);
-			return ResponseEntity.ok(new ResponseAPI<>(true, booking, "Booking retrieved succesfully"));
+			return ResponseEntity.ok(new ResponseAPI<>(true, booking, "Reserva obtenida correctamente."));
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}
@@ -67,9 +67,9 @@ public class BookingController {
 
 		if (bookings.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new ResponseAPI<>(false, null, "There are no bookings"));
+					.body(new ResponseAPI<>(false, null, "No hay reservas."));
 		} else {
-			return ResponseEntity.ok(new ResponseAPI<>(true, bookings, "Bookings retrieved succesfully"));
+			return ResponseEntity.ok(new ResponseAPI<>(true, bookings, "Reservas obtenidas correctamente."));
 		}
 	}
 
@@ -77,7 +77,7 @@ public class BookingController {
 	public ResponseEntity<?> addBooking(@RequestBody BookingDTO bookingDTO) {
 
 		bookingService.addBooking(bookingDTO);
-		return ResponseEntity.ok(new ResponseAPI<>(true, bookingDTO, "Booking added succesfully"));
+		return ResponseEntity.ok(new ResponseAPI<>(true, bookingDTO, "Reserva añadida correctamente."));
 
 	}
 
@@ -86,7 +86,7 @@ public class BookingController {
 		try {
 			bookingService.cancelBooking(id);
 			return ResponseEntity
-					.ok(new ResponseAPI<>(true, bookingService.getBookingById(id), "Booking retrieved succesfully"));
+					.ok(new ResponseAPI<>(true, bookingService.getBookingById(id), "Reserva obtenida correctamente."));
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}
