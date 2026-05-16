@@ -1,0 +1,15 @@
+# VCS and IDE
+.git
+.gitignore
+.settings
+.project
+.classpath
+
+# Build outputs
+target
+
+# Local runtime files
+.env
+
+# Docker artifacts
+docker
