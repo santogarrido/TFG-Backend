@@ -18,6 +18,7 @@ services:
       minio.endpoint: http://minio:9000
       minio.access-key: ${MINIO_ROOT_USER:-minioadmin}
       minio.secret-key: ${MINIO_ROOT_PASSWORD:-minioadmin123}
+      minio.public-url: http://149.202.58.58:9000
 
   mysql:
     image: mysql:8
