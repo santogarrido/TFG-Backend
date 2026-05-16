@@ -30,20 +30,20 @@ public class CourtController {
 	@GetMapping
 	public ResponseEntity<?> getAllCourts() {
 		List<CourtDTO> courts = courtService.listAllCourts();
-		return ResponseEntity.ok(new ResponseAPI<>(true, courts, "Courts retrieved successfully"));
+		return ResponseEntity.ok(new ResponseAPI<>(true, courts, "Pistas obtenidas correctamente."));
 	}
 
 	@GetMapping("/facility/{id}")
 	public ResponseEntity<?> getCourtsByFacility(@PathVariable int id) {
 		List<CourtDTO> courts = courtService.listCourtsByFacilityId(id);
-		return ResponseEntity.ok(new ResponseAPI<>(true, courts, "Courts retrieved successfully"));
+		return ResponseEntity.ok(new ResponseAPI<>(true, courts, "Pistas obtenidas correctamente."));
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getCourtById(@PathVariable int id) {
 		try {
 			CourtDTO court = courtService.getCourtById(id);
-			return ResponseEntity.ok(new ResponseAPI<>(true, court, "Court retrieved successfully"));
+			return ResponseEntity.ok(new ResponseAPI<>(true, court, "Pista obtenida correctamente."));
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}
@@ -54,7 +54,7 @@ public class CourtController {
 		try {
 			CourtDTO newCourt = courtService.addCourt(courtDTO);
 			return ResponseEntity.status(HttpStatus.CREATED)
-					.body(new ResponseAPI<>(true, newCourt, "Court created successfully"));
+					.body(new ResponseAPI<>(true, newCourt, "Pista creada correctamente."));
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}
@@ -64,7 +64,7 @@ public class CourtController {
 	public ResponseEntity<?> updateCourt(@PathVariable int id, @RequestBody CourtDTO courtDTO) {
 		try {
 			CourtDTO updatedCourt = courtService.updateCourt(id, courtDTO);
-			return ResponseEntity.ok(new ResponseAPI<>(true, updatedCourt, "Court updated successfully"));
+			return ResponseEntity.ok(new ResponseAPI<>(true, updatedCourt, "Pista actualizada correctamente."));
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}
@@ -74,7 +74,7 @@ public class CourtController {
 	public ResponseEntity<?> deleteCourt(@PathVariable int id) {
 		try {
 			courtService.deleteCourt(id);
-			return ResponseEntity.ok(new ResponseAPI<>(true, null, "Court deleted successfully"));
+			return ResponseEntity.ok(new ResponseAPI<>(true, null, "Pista eliminada correctamente."));
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}
@@ -84,7 +84,7 @@ public class CourtController {
 	public ResponseEntity<?> activateCourt(@PathVariable int id) {
 		try {
 			courtService.activateCourt(id);
-			return ResponseEntity.ok(new ResponseAPI<>(true, null, "Court activated successfully"));
+			return ResponseEntity.ok(new ResponseAPI<>(true, null, "Pista activada correctamente."));
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}
@@ -94,7 +94,7 @@ public class CourtController {
 	public ResponseEntity<?> deactivateCourt(@PathVariable int id) {
 		try {
 			courtService.deactivateCourt(id);
-			return ResponseEntity.ok(new ResponseAPI<>(true, null, "Court deactivated successfully"));
+			return ResponseEntity.ok(new ResponseAPI<>(true, null, "Pista desactivada correctamente."));
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}

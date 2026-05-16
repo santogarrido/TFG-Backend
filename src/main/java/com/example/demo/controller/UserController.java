@@ -40,7 +40,7 @@ public class UserController {
 	@GetMapping
 	public ResponseEntity<?> getAllUsers() {
 		List<UserDTO> users = userService.listAllUsers();
-		return ResponseEntity.ok(new ResponseAPI<>(true, users, "Users retrieved successfully."));
+		return ResponseEntity.ok(new ResponseAPI<>(true, users, "Usuarios obtenidos correctamente."));
 
 	}
 
@@ -48,7 +48,7 @@ public class UserController {
 	public ResponseEntity<?> getUserById(@PathVariable int id) {
 		try {
 			UserDTO user = userService.getUserById(id);
-			return ResponseEntity.ok(new ResponseAPI<>(true, user, "User retrieved successfully"));
+			return ResponseEntity.ok(new ResponseAPI<>(true, user, "Usuario obtenido correctamente."));
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}
@@ -58,7 +58,7 @@ public class UserController {
 	public ResponseEntity<?> deleteUser(@PathVariable int id) {
 		try {
 			userService.deleteUser(id);
-			return ResponseEntity.ok(new ResponseAPI<>(true, null, "User deleted successfully."));
+			return ResponseEntity.ok(new ResponseAPI<>(true, null, "Usuario eliminado correctamente."));
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}
@@ -68,7 +68,7 @@ public class UserController {
 	public ResponseEntity<?> activateUser(@PathVariable int id) {
 		try {
 			userService.activateUser(id);
-			return ResponseEntity.ok(new ResponseAPI<>(true, null, "User activated successfully"));
+			return ResponseEntity.ok(new ResponseAPI<>(true, null, "Usuario activado correctamente."));
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}
@@ -78,7 +78,7 @@ public class UserController {
 	public ResponseEntity<?> deactivateUser(@PathVariable int id) {
 		try {
 			userService.deactivateUser(id);
-			return ResponseEntity.ok(new ResponseAPI<>(true, null, "User deactivated successfully"));
+			return ResponseEntity.ok(new ResponseAPI<>(true, null, "Usuario desactivado correctamente."));
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}
@@ -89,7 +89,7 @@ public class UserController {
 		try {
 			UserDTO user = userService.updateUser(id, userDTO);
 
-			return ResponseEntity.ok(new ResponseAPI<>(true, user, "User updated successfully"));
+			return ResponseEntity.ok(new ResponseAPI<>(true, user, "Usuario actualizado correctamente."));
 		} catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}
@@ -103,7 +103,7 @@ public class UserController {
 	public ResponseEntity<?> getUserWallet(@PathVariable int id){
 		try {
 			UserWalletDTO wallet = walletService.getUserWallet(id);
-			return ResponseEntity.ok(new ResponseAPI<>(true, wallet, "Users wallet retrieved successfully"));
+			return ResponseEntity.ok(new ResponseAPI<>(true, wallet, "Cartera del usuario devuelta correctamente"));
 		}catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}
@@ -113,8 +113,8 @@ public class UserController {
 	public ResponseEntity<?> depositToWallet(@PathVariable int id, @RequestParam BigDecimal amount) {
 		
 		try {
-			UserWalletDTO wallet = walletService.creditUserWallet(id, amount, "Adding money to user's wallet");
-			return ResponseEntity.ok(new ResponseAPI<>(true, wallet, "Money added successfully"));
+			UserWalletDTO wallet = walletService.creditUserWallet(id, amount, "Dinero añadido a la cartera");
+			return ResponseEntity.ok(new ResponseAPI<>(true, wallet, "Dinero añadido correctamente"));
 		}catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}
@@ -126,7 +126,7 @@ public class UserController {
 	public ResponseEntity<?> getUserWalletTransactions(@PathVariable int id){
 		try {
 			List<WalletTransactionDTO> transactions = walletService.getUserTransactions(id);
-			return ResponseEntity.ok(new ResponseAPI<>(true, transactions, "Users wallet retrieved successfully"));
+			return ResponseEntity.ok(new ResponseAPI<>(true, transactions, "Transacciones del usuario devuelta correctamente"));
 		}catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}

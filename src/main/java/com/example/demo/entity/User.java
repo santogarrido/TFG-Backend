@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import java.util.List;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -45,6 +46,11 @@ public class User {
 	private String role;
 
 	private boolean activated;
+
+	@Column(unique = true)
+	private String activationToken;
+
+	private LocalDateTime activationTokenExpiresAt;
 
 	private boolean deleted;
 

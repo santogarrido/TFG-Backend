@@ -44,14 +44,14 @@ public class FacilityController {
 	@GetMapping("/getAll")
 	public ResponseEntity<?> getAllFacilities(){
 		List<FacilityDTO> facilities = facilityService.listAllFacilities();
-		return ResponseEntity.ok(new ResponseAPI<>(true, facilities, "Facilities retrieved succesfully"));
+		return ResponseEntity.ok(new ResponseAPI<>(true, facilities, "Instalaciones obtenidas correctamente."));
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getFacilityById(@PathVariable int id){
 		try {
 			FacilityDTO facilityDTO = facilityService.getFacilityById(id);
-			return ResponseEntity.ok(new ResponseAPI<>(true, facilityDTO, "Facility retrieved successfully"));
+			return ResponseEntity.ok(new ResponseAPI<>(true, facilityDTO, "Instalación obtenida correctamente."));
 		}catch(RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}
@@ -67,7 +67,7 @@ public class FacilityController {
 			if (file != null && !file.isEmpty()) {
 				if (!file.getContentType().startsWith("image/")) {
 					return ResponseEntity.badRequest()
-							.body(new ResponseAPI<>(false, null, "Only image files are allowed"));
+							.body(new ResponseAPI<>(false, null, "Solo se permiten archivos de imagen."));
 				}
 
 				// Subir a MinIO
@@ -81,7 +81,7 @@ public class FacilityController {
 			FacilityDTO savedFacility = facilityService.addFacility(facilityDTO);
 
 			return ResponseEntity.ok(
-					new ResponseAPI<>(true, savedFacility, "Facility added successfully")
+					new ResponseAPI<>(true, savedFacility, "Instalación añadida correctamente.")
 			);
 
 		} catch (Exception e) {
@@ -95,7 +95,7 @@ public class FacilityController {
 		
 		try {
 			facilityService.deleteFacility(id);
-			return ResponseEntity.ok(new ResponseAPI<>(true, facilityService.getFacilityById(id), "Facility added succesfully"));
+			return ResponseEntity.ok(new ResponseAPI<>(true, facilityService.getFacilityById(id), "Instalación añadida correctamente."));
 		}catch(RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}
@@ -105,7 +105,7 @@ public class FacilityController {
 	public ResponseEntity<?> updateFacility(@PathVariable long id ,@RequestBody FacilityDTO facilityDTO){
 		try {
 			FacilityDTO facility = facilityService.updateFacility(id, facilityDTO);
-			return ResponseEntity.ok(new ResponseAPI<>(true, facility, "Facility added successfully"));
+			return ResponseEntity.ok(new ResponseAPI<>(true, facility, "Instalación añadida correctamente."));
 		}catch (RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}
@@ -116,7 +116,7 @@ public class FacilityController {
 	public ResponseEntity<?> activateFacility(@PathVariable long id){
 		try {
 			facilityService.activateFacility(id);
-			return ResponseEntity.ok(new ResponseAPI<>(true, facilityService.getFacilityById(id), "Facility activated successfully"));
+			return ResponseEntity.ok(new ResponseAPI<>(true, facilityService.getFacilityById(id), "Instalación activada correctamente."));
 		}catch(RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}
@@ -127,7 +127,7 @@ public class FacilityController {
 	public ResponseEntity<?> deactivateFacility(@PathVariable long id){
 		try {
 			facilityService.deactivateFacility(id);
-			return ResponseEntity.ok(new ResponseAPI<>(true, facilityService.getFacilityById(id), "Facility deactivated successfully"));
+			return ResponseEntity.ok(new ResponseAPI<>(true, facilityService.getFacilityById(id), "Instalación desactivada correctamente."));
 		}catch(RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseAPI<>(false, null, e.getMessage()));
 		}
@@ -139,7 +139,7 @@ public class FacilityController {
 	public ResponseEntity<?> getFacilityWallet(@PathVariable long id) {
 	    try {
 	        FacilityWalletDTO wallet = walletService.getFacilityWallet(id);
-	        return ResponseEntity.ok(new ResponseAPI<>(true, wallet, "Facility wallet retrieved successfully"));
+	        return ResponseEntity.ok(new ResponseAPI<>(true, wallet, "Cartera de la instalación obtenida correctamente."));
 	    } catch (RuntimeException e) {
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND)
 	                .body(new ResponseAPI<>(false, null, e.getMessage()));
@@ -152,7 +152,7 @@ public class FacilityController {
 	public ResponseEntity<?> getFacilityWalletTransactions(@PathVariable int id){
 	    try {
 	        List<WalletTransactionDTO> transactions = walletService.getFacilityTransactions(id);
-	        return ResponseEntity.ok(new ResponseAPI<>(true, transactions, "Facility transactions retrieved successfully"));
+	        return ResponseEntity.ok(new ResponseAPI<>(true, transactions, "Transacciones de la instalación obtenidas correctamente."));
 	    } catch (RuntimeException e) {
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND)
 	                .body(new ResponseAPI<>(false, null, e.getMessage()));

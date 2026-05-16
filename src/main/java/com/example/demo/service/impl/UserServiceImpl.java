@@ -38,14 +38,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDTO getUserById(int id) {
 		UserDTO userDTO = transform(
-				userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found")));
+				userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado.")));
 		return userDTO;
 	}
 	
 	@Override
 	public UserDTO getUserByUsername(String username) {
 		UserDTO userDTO = transform(
-				userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found")));
+				userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuario no encontrado.")));
 		return userDTO;
 	}
 
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public UserDTO updateUser(int id, UserDTO userDTO) {
-		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
 		user.setName(userDTO.getName());
 		user.setSecondName(userDTO.getSecondName());
 		return transform(userRepository.save(user));
@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public void deleteUser(int id) {
-		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
 		user.setDeleted(true);
 		user.setActivated(false);
 		userRepository.save(user);
@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public void activateUser(int id) {
-		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
 		user.setActivated(true);
 		userRepository.save(user);
 	}
@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public void deactivateUser(int id) {
-		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
 		user.setActivated(false);
 		userRepository.save(user);
 	}

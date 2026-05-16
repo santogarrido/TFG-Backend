@@ -1,5 +1,6 @@
 package com.example.demo.minioConfig;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,11 +9,20 @@ import io.minio.MinioClient;
 @Configuration
 public class MinIoConfig {
 
+    @Value("${minio.endpoint:http://localhost:9000}")
+    private String endpoint;
+
+    @Value("${minio.access-key:minioadmin}")
+    private String accessKey;
+
+    @Value("${minio.secret-key:minioadmin123}")
+    private String secretKey;
+
     @Bean
     public MinioClient minioClient() {
         return MinioClient.builder()
-                .endpoint("http://localhost:9000")
-                .credentials("minioadmin", "minioadmin123")
+                .endpoint(endpoint)
+                .credentials(accessKey, secretKey)
                 .build();
     }
 }
