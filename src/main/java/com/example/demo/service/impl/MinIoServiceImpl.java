@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,6 +15,9 @@ import io.minio.PutObjectArgs;
 public class MinIoServiceImpl implements MinIoService{
 
 	private MinioClient minioClient;
+
+	@Value("${minio.public-url:http://localhost:9000}")
+	private String minioPublicUrl;
 	
 	private final String facilityBucket = "facility";
 	
@@ -48,7 +52,8 @@ public class MinIoServiceImpl implements MinIoService{
 					.build()
 			);
 			
-			return "http://10.0.2.2:9000/" + facilityBucket + "/" + fileName;
+			String baseUrl = minioPublicUrl.endsWith("/") ? minioPublicUrl.substring(0, minioPublicUrl.length() - 1) : minioPublicUrl;
+			return baseUrl + "/" + facilityBucket + "/" + fileName;
 			
 		}catch (Exception e) {
 			throw new RuntimeException("Error al subir la imagen " + e);
